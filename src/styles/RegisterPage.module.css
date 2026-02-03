@@ -1,0 +1,228 @@
+/* General Styling */
+.signupSection {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: start;
+    margin: 0;
+    padding: 10px 10px; /* Adjusted for better spacing on smaller screens */
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 90%; /* Wider for smaller screens */
+    max-width: 500px; /* Restrict max width */
+    padding: 10px 20px; /* Adjust padding for smaller screens */
+    margin: 0;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 16px;
+    background: white;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    animation: fadeIn 0.8s ease-in-out;
+}
+
+
+/* Heading styling */
+.title {
+    margin: 8px;
+    font-size: 24px;
+    color: #333;
+    font-weight: bold;
+}
+
+/* Label styling for consistency */
+.label {
+    font-size: 14px;
+    font-weight: bold;
+    color: #555;
+    margin-bottom: 6px;
+    display: block;
+    text-align: left;
+    width: 100%;
+}
+
+/* Input group for structured layout */
+.formGroup {
+    width: 100%;
+    margin: 6px 0;
+}
+
+/* Input field styling */
+.input {
+    width: 95%;
+    padding: 14px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.input:focus {
+    border-color: #007bff;
+    outline: none;
+    box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
+}
+
+.passwordFieldDiv {
+    position: relative;
+}
+
+.imageSpan img {
+    cursor: pointer;
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+}
+
+.imageSpan img:hover {
+    opacity: 0.7;
+}
+
+.imageSpan {
+    position: absolute;
+    bottom: 20px;
+    right: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 6%;
+    height: 6%;
+}
+
+.errorDiv {
+    display: flex;
+    justify-content: start;
+    align-items: start;
+    width: 100%;
+    height: 100%;
+}
+
+.userNameErrorTag, .emailErrorTag, .passwordErrorTag {
+    color: #dc3545; /* Red color for errors */
+    font-size: 0.85em;
+    margin-top: 5px;
+    min-height: 1.2em; /* Reserve space to prevent layout shifting */
+}
+
+.links {
+    margin-top: 10px;
+    text-decoration: none;
+    color: #007bff;
+    font-size: 1em;
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+.links:hover {
+    color: #0056b3;
+    text-decoration: underline;
+}
+
+.links:active {
+    color: #004085;
+}
+
+.links:visited {
+    color: #0056b3;
+}
+
+/* Button styling for actions */
+.button {
+    width: 50%;
+    padding: 14px;
+    border: none;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.button:hover {
+    background: linear-gradient(135deg, #2575fc 0%, #6a11cb 100%);
+    transform: translateY(-2px);
+}
+
+/* Helper text styling */
+.helperText {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 20px;
+    display: block;
+    text-align: left;
+    width: 100%
+}
+
+/* Link styling */
+.link {
+    color: #6a11cb;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.link:hover {
+    text-decoration: underline;
+    color: #2575fc;
+}
+
+/* Fade-in animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Responsive Media Queries */
+@media (max-width: 768px) {
+    .container {
+        width: 80%; /* Adjust width for tablets */
+        padding: 15px; /* Reduce padding */
+    }
+
+    .button {
+        width: 70%; /* Increase button width for smaller screens */
+    }
+
+    .input {
+        font-size: 14px; /* Reduce font size for better fit */
+    }
+
+    .heading {
+        font-size: 20px; /* Slightly smaller heading for tablets */
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        width: 95%; /* Full width for mobile devices */
+    }
+
+    .input {
+        padding: 12px; /* Adjust padding for smaller inputs */
+    }
+
+    .button {
+        width: 100%; /* Full width button for mobile devices */
+        padding: 12px;
+        font-size: 14px; /* Slightly smaller text */
+    }
+
+    .heading {
+        font-size: 18px; /* Adjust heading for smaller screens */
+    }
+
+    .label {
+        font-size: 12px; /* Smaller labels for mobile */
+    }
+}

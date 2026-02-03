@@ -1,0 +1,215 @@
+/* General Section Styling */
+.cartSection {
+    display: flex;
+    flex-direction: column;
+    background-color: #f9f9f9;
+    font-family: 'Arial', sans-serif;
+    padding: 0;
+    margin: 0;
+}
+
+/* Header Styling */
+h1 {
+    text-align: left;
+    font-size: 2rem;
+    color: #333;
+    margin-top: 0px;
+    box-sizing: border-box; /* Include padding and border in width/height calculations */
+}
+
+/* No Items Message */
+h2 {
+    color: #555;
+    font-size: 1.5rem;
+    text-align: left;
+    padding: 0px 20px;
+}
+
+/* Item Styling */
+.item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    background: #fff;
+    margin: 10px auto;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 90%;
+    min-height: 200px;
+    transition: transform 0.3s ease-in-out;
+}
+
+.item:hover {
+    transform: scale(1.02);
+}
+
+/* Image Container */
+.imageContainer {
+    flex-shrink: 0;
+    margin-right: 15px;
+    width: 20%;
+    max-height: 70%;
+    overflow: hidden;
+    border-radius: 8px;
+    /* border: 1px solid #ddd; */
+}
+
+.imageContainer img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: cover;
+    height: auto;
+}
+
+/* Details Section */
+.details {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #333;
+    padding: 0;
+    margin: 0;
+}
+
+/* Ratings and Price */
+.ratingsDiv {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 5px 0;
+}
+
+.ratingImg {
+    width: 100px;
+    height: auto;
+}
+
+.ratingsCount {
+    font-size: 1.1rem;
+    color: #555;
+}
+
+.price {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #28a745;
+}
+
+/* Product Buttons */
+.productButtons {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: end;
+    width: 100%;
+}
+
+/* Place Order Button */
+.placeOrderBtn {
+    background-color: #28a745; /* Green for call-to-action */
+    color: #fff;
+    font-size: 1rem;
+    font-weight: bold;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+
+.placeOrderBtn:hover {
+    background-color: #218838;
+    transform: scale(1.05);
+}
+
+.placeOrderBtn:active {
+    background-color: #1e7e34;
+    transform: scale(0.98);
+}
+
+.cancelOrderDiv button {
+    background-color: #e74c3c;
+}
+
+.cancelOrderDiv button:hover {
+    background-color: #c0392b;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .item {
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 15px;
+    }
+
+    .imageContainer {
+        margin-bottom: 10px;
+    }
+
+    .details {
+        flex-direction: column;
+        justify-content: flex-start;
+    }
+
+    .title {
+        font-size: 1rem;
+    }
+
+    .ratingsDiv {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
+
+    .price {
+        font-size: 1rem;
+    }
+
+    .placeOrderBtn {
+        font-size: 1rem;
+        padding: 10px 10px;
+    }
+}
+
+@media (max-width: 480px) {
+
+    h1 {
+        font-size: 1.5rem;
+    }
+
+    .item {
+        width: 100%;
+        flex-direction: column;
+    }
+
+    .imageContainer {
+        width: 60px;
+        height: 60px;
+    }
+
+    .title {
+        font-size: 0.9rem;
+    }
+
+    .ratingsCount {
+        font-size: 0.8rem;
+    }
+
+    .price {
+        font-size: 0.9rem;
+    }
+
+    .placeOrderBtn {
+        font-size: 0.9rem;
+        padding: 8px 9px;
+    }
+}

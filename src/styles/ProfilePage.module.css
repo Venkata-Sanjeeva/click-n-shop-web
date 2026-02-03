@@ -1,0 +1,202 @@
+.signupSection {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #f0f2f5;
+    padding: 20px;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+.title {
+    color: #333;
+    margin: 20px 0px;
+    font-size: 2.5em;
+    font-weight: 700;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.registerForm {
+    background-color: #ffffff;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Two columns for larger screens */
+    gap: 30px;
+    max-width: 900px; /* Adjust as needed */
+    width: 100%;
+}
+
+.column {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.formGroup {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.label {
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #555;
+    font-size: 1em;
+}
+
+.inputPasswordDiv, .inputConfirmPasswordDiv {
+    position: relative;
+}
+
+.imageSpan img {
+    cursor: pointer;
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+}
+
+.imageSpan img:hover {
+    opacity: 0.7;
+}
+
+.imageSpan {
+    position: absolute;
+    bottom: 20px;
+    right: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 6%;
+    height: 6%;
+}
+
+.input {
+    padding: 12px 15px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 1em;
+    color: #333;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    width: 100%;
+    box-sizing: border-box; /* Ensures padding doesn't increase total width */
+}
+
+.input:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+    outline: none;
+}
+
+.input::placeholder {
+    color: #999;
+}
+
+select.input {
+    appearance: none; /* Remove default arrow on select */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url('data:image/svg+xml;utf8,<svg fill="%23333" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 20px;
+    padding-right: 35px; /* Make space for the custom arrow */
+}
+
+
+/* Error Tags (assuming they are typically styled to be visible when content is invalid) */
+.nameErrorTag,
+.dobErrorTag,
+.genderErrorTag,
+.userNameErrorTag,
+.passwordErrorTag,
+.confirmPasswordErrorTag,
+.emailErrorTag,
+.phoneErrorTag,
+.addressErrorTag,
+.cityErrorTag,
+.countryErrorTag,
+.zipErrorTag {
+    color: #dc3545; /* Red color for errors */
+    font-size: 0.85em;
+    margin-top: 5px;
+    min-height: 1.2em; /* Reserve space to prevent layout shifting */
+}
+
+/* Specific styling for the dobTag if needed, though often .formGroup is sufficient */
+.dobTag {
+    /* Add any specific styles for the DOB input if it needs unique spacing or alignment */
+}
+
+.loginLabel {
+    color: #218838;
+    margin-bottom: 8px;
+    font-weight: 600;
+    font-size: 1em;
+}
+
+.links {
+    text-decoration: none;
+    color: #007bff;
+    font-size: 1em;
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+.links:hover {
+    color: #0056b3;
+    text-decoration: underline;
+}
+
+.links:active {
+    color: #004085;
+}
+
+.links:visited {
+    color: #0056b3;
+}
+
+.buttonContainer {
+    grid-column: 1 / -1; /* Span across all columns */
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.registerButton {
+    background-color: #28a745; /* Green button */
+    color: white;
+    padding: 15px 30px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.2em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.registerButton:hover {
+    background-color: #218838;
+    transform: translateY(-2px);
+}
+
+.registerButton:active {
+    background-color: #1e7e34;
+    transform: translateY(0);
+}
+
+@media (max-width: 768px) {
+    .registerForm {
+        grid-template-columns: 1fr; /* Single column for smaller screens */
+    }
+}

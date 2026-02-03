@@ -1,0 +1,156 @@
+body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+    background-color: #f0f2f5;
+}
+
+.container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    padding: 20px;
+    background-color: #f8f9fa;
+}
+
+.item {
+    display: flex;
+    flex-direction: column;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+}
+
+.imageContainer {
+    width: 100%;
+    height: 250px;
+    overflow: hidden;
+    background-color: #ffffff;
+    cursor: pointer;
+}
+
+.imageContainer img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.details {
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #343a40;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: pointer;
+}
+
+.ratingsDiv {
+    display: flex;
+    gap: 5px;
+}
+
+.ratingsDiv span {
+    margin-left: 5px;
+    margin-right: 15px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.ratingsCount {
+    color: rgb(255, 0, 0);
+}
+
+.ratingsCount:hover {
+    color: #07dc4b;
+}
+
+.price:hover {
+    color: rgb(243, 0, 0);
+}
+
+.ratingImg {
+    width: 80px;
+    height: 20px;
+}
+
+.price {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #007bff;
+}
+
+.heartIcon {
+    max-width: 10%;
+    cursor: pointer;
+    transition: scale 0.5s ease;
+}
+
+.heartIcon:hover {
+    scale: 1.10;
+}
+
+.heartIcon:active {
+    scale: 0.90;
+}
+
+
+.cartSuccessMsg {
+    width: 200px;
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    max-width: 260px;
+    color: #007bff;
+}
+
+.cartMsg.addedToCart::before {
+    content: "";
+    display: inline-block;
+    width: 20px; /* Adjust the width */
+    height: 20px; /* Adjust the height */
+    background-image: url("../../public/images/icons/checkmark.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+    margin-right: 4px;
+}
+
+
+.cartMsg {
+    height: 10px;
+    font-weight: 600;
+    color: rgb(0, 139, 92);
+}
+
+.button {
+    margin: 10px;
+    padding: 10px;
+    font-size: 0.9rem;
+    color: #ffffff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.button:hover {
+    background-color: #0056b3;
+}
