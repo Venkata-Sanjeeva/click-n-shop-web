@@ -6,6 +6,8 @@ import Loader from './Loader';
 import PopUp from './PopUp';
 import { useNavigate } from 'react-router-dom';
 
+const API_URL = process.env.REACT_APP_API_URL;
+
 export default function CartPage() {
 
     const [selectedProducts, setSelectedProducts] = useState([]);
@@ -20,11 +22,8 @@ export default function CartPage() {
     useEffect(() => {
         const userObj = JSON.parse(sessionStorage.getItem("user"));
 
-        axios.get("http://localhost:8080/cart")
-        .then(res => {
-            const userFound = (res.data || []).find(user => user.id === userObj.id);
-            if(userFound) {
-                axios.get("http://localhost:8080/cart/" + userObj.id)
+        if(userObj && userObj.uniqueId) {
+                axios.get(`${API_URL}/cart/fetch/user/` + userObj.uniqueId)
                 .then(res => {
 
                     const cartProductIds = res.data.cartItems;
@@ -45,8 +44,6 @@ export default function CartPage() {
                     })
                 .catch(err => console.error(err));
             }
-        })
-        .catch(err => console.log(err));
     }, []);
 
     const handlePlaceOrder = (item) => {
