@@ -1,0 +1,52 @@
+SEE THE COMPLETE DOCUMENTATION HERE
+-----------------------------------
+-> https://www.npmjs.com/package/json-server
+-> run command "npx json-server db.json --port 8080" run from the location where it is located at.
+
+// after posting the data the id is going to be auto generated.
+
+Step 1: Install json-server
+If you haven't already installed json-server, you can use npx to run it directly or install it globally.
+
+Option 1: Using npx
+You don't need to install anything permanently; you can run:
+
+npx json-server --watch users.json --port 5000
+Option 2: Install it globally (optional)
+If you plan to use json-server frequently:
+
+npm install -g json-server
+Then you can start it using:
+
+json-server --watch users.json --port 5000
+Step 2: Create a users.json File
+Create a users.json file that will act as your data store. Here's an example:
+
+{
+  "users": [
+    { "id": 1, "username": "user1", "email": "user1@example.com" },
+    { "id": 2, "username": "user2", "email": "user2@example.com" }
+  ]
+}
+
+Step 3: Start the Server
+Run the following command in the terminal where the users.json file is located:
+
+npx json-server --watch users.json --port 5000
+This command starts a mock REST API server at http://localhost:5000.
+
+Step 4: Endpoints Available
+The json-server will automatically create endpoints based on the data in the JSON file. For the above example, these endpoints will be available:
+
+GET /users - Retrieve all users.
+
+GET /users/:id - Retrieve a specific user by ID.
+
+POST /users - Add a new user.
+
+PUT /users/:id - Update an existing user.
+
+DELETE /users/:id - Delete a user.
+
+You can use these endpoints to handle your API requests.
+

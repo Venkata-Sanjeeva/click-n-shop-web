@@ -1,0 +1,277 @@
+{
+  "users": [
+    {
+      "id": "530d",
+      "fullName": "VenkataSanjeeva Kuntumalla",
+      "username": "Sanjeeva",
+      "password": "1234",
+      "email": "kuntumallavenkatasanjeeva2005@gmail.com",
+      "phone": "8186863951",
+      "address": "23/620, Nagalakatta Street.",
+      "city": "Jammalamadugu",
+      "country": "India",
+      "zipcode": "516434",
+      "state": "Andhra Pradesh",
+      "gender": "male",
+      "dob": "2004-02-07"
+    },
+    {
+      "id": "c2c8",
+      "fullName": "Vignesh Raja",
+      "username": "Vignesh",
+      "password": "Vignesh@123",
+      "email": "vignesh@123",
+      "phone": "1234567",
+      "address": "23/620, Nagalakatta Street.",
+      "city": "Jammalamadugu",
+      "country": "India",
+      "zipcode": "516434",
+      "state": "Andhra Pradesh",
+      "gender": "male",
+      "dob": "1022-02-02"
+    },
+    {
+      "id": "bbf8",
+      "username": "Rakesh",
+      "password": "Rakesh@123",
+      "email": "rakeshlara.co.in@gmail.com",
+      "fullName": "Rakesh Ayyadurai",
+      "phone": "8186863951",
+      "address": "123/123",
+      "city": "Jammalamadugu",
+      "country": "India",
+      "zipcode": "516434",
+      "state": "Andhra Pradesh",
+      "gender": "female",
+      "dob": "2004-06-05"
+    },
+    {
+      "id": "3f75",
+      "username": "XUser",
+      "password": "123456",
+      "email": "xuser123@gmail.com",
+      "fullName": "Sam",
+      "phone": "1233444",
+      "address": "123/123",
+      "city": "Jammalamadugu",
+      "country": "India",
+      "zipcode": "516434",
+      "state": "Andhra Pradesh",
+      "gender": "female",
+      "dob": "2001-01-01"
+    },
+    {
+      "id": "54fa",
+      "username": "Krishnaiah",
+      "password": "Krishna@123",
+      "email": "balimidikrishnaiah@gmail.com",
+      "fullName": "Krishnaiah Balimidi",
+      "phone": "7093435419",
+      "address": "3/134, Mylavaram",
+      "city": "Benguela",
+      "country": "Angola",
+      "zipcode": "12345",
+      "state": "Benguela Province",
+      "gender": "male",
+      "dob": "2004-04-29"
+    },
+    {
+      "id": "cb79",
+      "username": "hari",
+      "password": "1234567",
+      "email": "hari@gmail.com"
+    }
+  ],
+  "cart": [
+    {
+      "id": "530d",
+      "cartItems": [
+        {
+          "productId": "15b6fc6f-327a-4ec4-896f-486349e85a3d",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "id": "54fa",
+      "cartItems": []
+    },
+    {
+      "id": "cb79",
+      "cartItems": []
+    }
+  ],
+  "wishList": [
+    {
+      "id": "530d",
+      "wishListProducts": [
+        {
+          "productId": "83d4ca15-0f35-48f5-b7a3-1ea210004f2e"
+        }
+      ]
+    },
+    {
+      "id": "54fa",
+      "wishListProducts": []
+    },
+    {
+      "id": "cb79",
+      "wishListProducts": []
+    }
+  ],
+  "orders": [
+    {
+      "id": "530d",
+      "orderItems": []
+    },
+    {
+      "id": "54fa",
+      "orderItems": []
+    },
+    {
+      "id": "cb79",
+      "orderItems": []
+    }
+  ],
+  "userOrders": [
+    {
+      "id": "530d",
+      "ordersList": [
+        {
+          "orderId": "fdd4abf6-a3ea-4fd7-bc60-89fcc428249c",
+          "productsList": [
+            {
+              "productId": "15b6fc6f-327a-4ec4-896f-486349e85a3d",
+              "quantity": 3
+            },
+            {
+              "productId": "54e0eccd-8f36-462b-b68a-8182611d9add",
+              "quantity": 5
+            }
+          ],
+          "orderDate": "8/6/2025",
+          "dueDate": "15/6/2025",
+          "totalPrice": "331.45"
+        },
+        {
+          "orderId": "59fb88f0-fabf-4c21-bad7-a41b27983eda",
+          "productsList": [
+            {
+              "productId": "15b6fc6f-327a-4ec4-896f-486349e85a3d",
+              "quantity": 5
+            }
+          ],
+          "orderDate": "8/6/2025",
+          "dueDate": "15/6/2025",
+          "totalPrice": "91.13"
+        },
+        {
+          "orderId": "2005c312-a0b5-4cfc-aec8-f81e68f93246",
+          "productsList": [
+            {
+              "productId": "15b6fc6f-327a-4ec4-896f-486349e85a3d",
+              "quantity": 1
+            }
+          ],
+          "orderDate": "15/7/2025",
+          "dueDate": "22/7/2025",
+          "totalPrice": "23.23"
+        }
+      ]
+    },
+    {
+      "id": "54fa",
+      "ordersList": [
+        {
+          "orderId": "5c47944b-a5ad-4d00-a216-aa5038294b67",
+          "productsList": [
+            {
+              "productId": "c2a82c5e-aff4-435f-9975-517cfaba2ece",
+              "quantity": 1
+            },
+            {
+              "productId": "e4f64a65-1377-42bc-89a5-e572d19252e2",
+              "quantity": 1
+            },
+            {
+              "productId": "19c6a64a-5463-4d45-9af8-e41140a4100c",
+              "quantity": 4
+            },
+            {
+              "productId": "a434b69f-1bc1-482d-9ce7-cd7f4a66ce8d",
+              "quantity": 1
+            }
+          ],
+          "orderDate": "8/6/2025",
+          "dueDate": "15/6/2025",
+          "totalPrice": "258.19"
+        },
+        {
+          "orderId": "cb8161be-4f9f-4cf2-9612-245bffbe57d5",
+          "productsList": [
+            {
+              "productId": "15b6fc6f-327a-4ec4-896f-486349e85a3d",
+              "quantity": 1
+            }
+          ],
+          "orderDate": "8/6/2025",
+          "dueDate": "15/6/2025",
+          "totalPrice": "23.23"
+        },
+        {
+          "orderId": "ebd3ffea-e354-4456-8a50-a762bf0b4e23",
+          "productsList": [
+            {
+              "productId": "e43638ce-6aa0-4b85-b27f-e1d07eb678c6",
+              "quantity": 1
+            },
+            {
+              "productId": "83d4ca15-0f35-48f5-b7a3-1ea210004f2e",
+              "quantity": 1
+            },
+            {
+              "productId": "54e0eccd-8f36-462b-b68a-8182611d9add",
+              "quantity": 1
+            }
+          ],
+          "orderDate": "8/6/2025",
+          "dueDate": "15/6/2025",
+          "totalPrice": "36.44"
+        }
+      ]
+    },
+    {
+      "id": "cb79",
+      "ordersList": [
+        {
+          "orderId": "a7490d7d-d863-4ef8-907c-b85bcb9356d6",
+          "productsList": [
+            {
+              "productId": "54e0eccd-8f36-462b-b68a-8182611d9add",
+              "quantity": 1
+            }
+          ],
+          "orderDate": "8/6/2025",
+          "dueDate": "15/6/2025",
+          "totalPrice": "19.24"
+        },
+        {
+          "orderId": "33bcb65a-ae3b-48e6-b8be-79315eaa3a73",
+          "productsList": [
+            {
+              "productId": "15b6fc6f-327a-4ec4-896f-486349e85a3d",
+              "quantity": 3
+            },
+            {
+              "productId": "83d4ca15-0f35-48f5-b7a3-1ea210004f2e",
+              "quantity": 4
+            }
+          ],
+          "orderDate": "8/6/2025",
+          "dueDate": "15/6/2025",
+          "totalPrice": "246.52"
+        }
+      ]
+    }
+  ]
+}
