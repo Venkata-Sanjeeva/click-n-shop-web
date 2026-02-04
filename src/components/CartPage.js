@@ -103,16 +103,16 @@ export default function CartPage() {
     }
 
 
-    const handleCancelOrder = (item) => {
+    const handleRemoveItem = (item) => {
         const userObj = JSON.parse(sessionStorage.getItem("user"));
 
         const removedCartProductsWithDetails = selectedProducts.filter(userWishListProduct => userWishListProduct.id !== item.id);
 
-        const removedCartProducts = removedCartProductsWithDetails.map(product => ({ productId: product.id }));
-
-        axios.patch("http://localhost:8080/cart/" + userObj.id, { cartItems: removedCartProducts })
-            .then(res => console.log(res.status))
-            .catch(err => console.error(err));
+        axios.delete(`${API_URL}/cart/delete/` + userObj.uniqueId + "/" + item.id)
+        .then(res => {
+            console.log(res.data);
+        })
+        .catch(err => console.log(err));
 
         setSelectedProducts(removedCartProductsWithDetails);
     }
@@ -144,7 +144,7 @@ export default function CartPage() {
                                         <button className={styles.placeOrderBtn} onClick={() => handlePlaceOrder(item)}>Place Order</button>
                                     </div>
                                     <div className={styles.cancelOrderDiv}>
-                                        <button className={styles.placeOrderBtn} onClick={() => handleCancelOrder(item)}>Cancel Order</button>
+                                        <button className={styles.placeOrderBtn} onClick={() => handleRemoveItem(item)}>Remove</button>
                                     </div>
                                 </div>
                             </div>
