@@ -30,18 +30,26 @@ export default function WishListPage() {
                 .then(res => {
                     const userWishList = res.data.wishListProducts;
 
-                    axios.get("https://supersimplebackend.dev/products")
-                        .then(response => {
-                            const apiProducts = response.data;
-                            const userWishListProductsArr = userWishList.map(wishListProduct => {
-                                const product = apiProducts.find(apiProduct => apiProduct.id === wishListProduct.productId);
-                                return product;
-                            })
+                    // axios.get("https://supersimplebackend.dev/products")
+                    //     .then(response => {
+                    //         const apiProducts = response.data;
+                    //         const userWishListProductsArr = userWishList.map(wishListProduct => {
+                    //             const product = apiProducts.find(apiProduct => apiProduct.id === wishListProduct.productId);
+                    //             return product;
+                    //         })
 
-                            setUserWishListProducts([...userWishListProductsArr]);
-                            setIsLoading(false);
-                        })
-                        .catch(err => console.log(err));
+                    //         setUserWishListProducts([...userWishListProductsArr]);
+                    //         setIsLoading(false);
+                    //     })
+                    //     .catch(err => console.log(err));
+                    const apiProducts = productsData;
+                    const userWishListProductsArr = userWishList.map(wishListProduct => {
+                        const product = apiProducts.find(apiProduct => apiProduct.id === wishListProduct.productId);
+                        return product;
+                    })
+
+                    setUserWishListProducts([...userWishListProductsArr]);
+                    setIsLoading(false);
                 })
                 .catch(err => console.log(err));
 

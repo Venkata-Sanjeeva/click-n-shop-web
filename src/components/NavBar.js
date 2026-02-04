@@ -34,15 +34,21 @@ const Navbar = () => {
         const userObj = JSON.parse(sessionStorage.getItem("user"));
         setUser(userObj);
 
-        axios.get("https://supersimplebackend.dev/products")
-            .then(res => {
-                const products = res.data;
+        // axios.get("https://supersimplebackend.dev/products")
+        //     .then(res => {
+        //         const products = res.data;
 
-                const modifiedProductsArr = products.map((product) => ({ id: product.id, name: product.name }));
+        //         const modifiedProductsArr = products.map((product) => ({ id: product.id, name: product.name }));
 
-                setApiProducts(modifiedProductsArr);
-            })
-            .catch(err => console.log(err));
+        //         setApiProducts(modifiedProductsArr);
+        //     })
+        //     .catch(err => console.log(err));
+
+        const products = productsData;
+
+        const modifiedProductsArr = products.map((product) => ({ id: product.id, name: product.name }));
+
+        setApiProducts(modifiedProductsArr);
 
         if (userObj) {
 

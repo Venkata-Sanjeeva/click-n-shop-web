@@ -17,97 +17,123 @@ export default function UserOrdersPage() {
         const userObj = JSON.parse(sessionStorage.getItem("user"));
 
         axios.get("http://localhost:8080/userOrders/")
-        .then(res => {
-            const apiOrderedUsers = res.data;
+            .then(res => {
+                const apiOrderedUsers = res.data;
 
-            const foundUser = apiOrderedUsers.find(user => user.id === userObj.id);
-            
+                const foundUser = apiOrderedUsers.find(user => user.id === userObj.id);
 
-            if(foundUser) {
-                axios.get("http://localhost:8080/userOrders/" + userObj.id)
-                .then(res => {
-                    const apiUserOrders = res.data.ordersList;
 
-                    const currentOrders = apiUserOrders.filter(order => (Number.parseInt(order.dueDate.substring(0, 2)) >= Number.parseInt(new Date().getDate())));
-                    
-                    const pastOrders = apiUserOrders.filter(order => (Number.parseInt(order.dueDate.substring(0, 2)) < Number.parseInt(new Date().getDate())));
+                if (foundUser) {
+                    axios.get("http://localhost:8080/userOrders/" + userObj.id)
+                        .then(res => {
+                            const apiUserOrders = res.data.ordersList;
 
-                    axios.get("https://supersimplebackend.dev/products")
-                    .then(res => {
+                            const currentOrders = apiUserOrders.filter(order => (Number.parseInt(order.dueDate.substring(0, 2)) >= Number.parseInt(new Date().getDate())));
 
-                        const apiProducts = res.data;
+                            const pastOrders = apiUserOrders.filter(order => (Number.parseInt(order.dueDate.substring(0, 2)) < Number.parseInt(new Date().getDate())));
 
-                        const currentOrdersWithProducts = currentOrders.map(order => {
-                            
-                            const orderProducts = order.productsList.map((product) => {
-                                const foundProduct = apiProducts.find((item) => item.id === product.productId);
-                                return foundProduct ? { ...foundProduct, quantity: product.quantity } : null; // Return null if not found
-                            }).filter(Boolean); // Optionally filter out null values
+                            // axios.get("https://supersimplebackend.dev/products")
+                            //     .then(res => {
 
-                            return({orderId: order.orderId, orderDate: order.orderDate, dueDate: order.dueDate, productsList: orderProducts});
-                        });
+                            //         const apiProducts = res.data;
 
-                        const pastOrdersWithProducts = pastOrders.map((order) => {
-                            
-                            const orderProducts = order.productsList.map((product) => {
-                                const foundProduct = apiProducts.find((item) => item.id === product.productId);
-                                return foundProduct ? { ...foundProduct, quantity: product.quantity } : null; // Return null if not found
-                            }).filter(Boolean); // Optionally filter out null values
+                            //         const currentOrdersWithProducts = currentOrders.map(order => {
 
-                            return({orderId: order.orderId, orderDate: order.orderDate, dueDate: order.dueDate, productsList: orderProducts});
+                            //             const orderProducts = order.productsList.map((product) => {
+                            //                 const foundProduct = apiProducts.find((item) => item.id === product.productId);
+                            //                 return foundProduct ? { ...foundProduct, quantity: product.quantity } : null; // Return null if not found
+                            //             }).filter(Boolean); // Optionally filter out null values
+
+                            //             return ({ orderId: order.orderId, orderDate: order.orderDate, dueDate: order.dueDate, productsList: orderProducts });
+                            //         });
+
+                            //         const pastOrdersWithProducts = pastOrders.map((order) => {
+
+                            //             const orderProducts = order.productsList.map((product) => {
+                            //                 const foundProduct = apiProducts.find((item) => item.id === product.productId);
+                            //                 return foundProduct ? { ...foundProduct, quantity: product.quantity } : null; // Return null if not found
+                            //             }).filter(Boolean); // Optionally filter out null values
+
+                            //             return ({ orderId: order.orderId, orderDate: order.orderDate, dueDate: order.dueDate, productsList: orderProducts });
+                            //         })
+
+                            //         setIsLoading(false);
+
+                            //         setCurrentUserOrders(currentOrdersWithProducts);
+                            //         setPastUserOrders(pastOrdersWithProducts);
+
+                            //     })
+                            //     .catch(err => console.log(err));
+                            const apiProducts = productsData;
+
+                            const currentOrdersWithProducts = currentOrders.map(order => {
+
+                                const orderProducts = order.productsList.map((product) => {
+                                    const foundProduct = apiProducts.find((item) => item.id === product.productId);
+                                    return foundProduct ? { ...foundProduct, quantity: product.quantity } : null; // Return null if not found
+                                }).filter(Boolean); // Optionally filter out null values
+
+                                return ({ orderId: order.orderId, orderDate: order.orderDate, dueDate: order.dueDate, productsList: orderProducts });
+                            });
+
+                            const pastOrdersWithProducts = pastOrders.map((order) => {
+
+                                const orderProducts = order.productsList.map((product) => {
+                                    const foundProduct = apiProducts.find((item) => item.id === product.productId);
+                                    return foundProduct ? { ...foundProduct, quantity: product.quantity } : null; // Return null if not found
+                                }).filter(Boolean); // Optionally filter out null values
+
+                                return ({ orderId: order.orderId, orderDate: order.orderDate, dueDate: order.dueDate, productsList: orderProducts });
+                            })
+
+                            setIsLoading(false);
+
+                            setCurrentUserOrders(currentOrdersWithProducts);
+                            setPastUserOrders(pastOrdersWithProducts);
                         })
+                        .catch(err => console.log(err));
 
-                        setIsLoading(false);
-
-                        setCurrentUserOrders(currentOrdersWithProducts);
-                        setPastUserOrders(pastOrdersWithProducts);
-
-                    })
-                    .catch(err => console.log(err));
-                })
-                .catch(err => console.log(err));
-
-            } else {
-                setCurrentUserOrders([]);
-                setIsLoading(false);
-            }
-        })
-        .catch(err => console.log(err));
+                } else {
+                    setCurrentUserOrders([]);
+                    setIsLoading(false);
+                }
+            })
+            .catch(err => console.log(err));
 
     }, []);
 
 
-    return(<>
-        <Navbar/>
+    return (<>
+        <Navbar />
         <h1>Orders Delivery Details</h1>
-        <>  
+        <>
             {
-                isLoading ? <Loader/> : currentUserOrders.length === 0 ? <h2>No products found.</h2> : <section className={styles.ordersDeliveryDetails}>
-                    
+                isLoading ? <Loader /> : currentUserOrders.length === 0 ? <h2>No products found.</h2> : <section className={styles.ordersDeliveryDetails}>
+
                     <div className={styles.currentOrdersDiv}>
                         {
                             currentUserOrders.map(order => {
-                                
-                                return(
+
+                                return (
                                     <div className={styles.ordersContainer} key={order.orderId}>
                                         <div className={styles.datesContainer}>
-                                            <h4 style={{fontSize: "1.2rem"}}>
+                                            <h4 style={{ fontSize: "1.2rem" }}>
                                                 Ordered Date: &nbsp;
-                                                <span style={{fontSize: "0.9rem", fontWeight: "normal"}}>
+                                                <span style={{ fontSize: "0.9rem", fontWeight: "normal" }}>
                                                     {order.orderDate}
                                                 </span>
                                             </h4>
 
-                                            <h4 style={{fontSize: "1.2rem"}}>
+                                            <h4 style={{ fontSize: "1.2rem" }}>
                                                 Delivery Date: &nbsp;
-                                                <span style={{fontSize: "0.9rem", fontWeight: "normal"}}>
+                                                <span style={{ fontSize: "0.9rem", fontWeight: "normal" }}>
                                                     {order.dueDate}
                                                 </span>
                                             </h4>
                                         </div>
                                         {
                                             order.productsList.map(product => {
-                                                return(
+                                                return (
                                                     <div className={styles.productCard} key={product.id}>
                                                         <div className={styles.imgContainer}>
                                                             <img src={product.image} alt="product" />
@@ -143,27 +169,27 @@ export default function UserOrdersPage() {
                         {console.log(pastUserOrders)}
                         {
                             pastUserOrders.map(order => {
-                                
-                                return(
+
+                                return (
                                     <div className={styles.ordersContainer} key={order.orderId}>
                                         <div className={styles.datesContainer}>
-                                            <h4 style={{fontSize: "1.2rem"}}>
+                                            <h4 style={{ fontSize: "1.2rem" }}>
                                                 Ordered Date: &nbsp;
-                                                <span style={{fontSize: "0.9rem", fontWeight: "normal"}}>
+                                                <span style={{ fontSize: "0.9rem", fontWeight: "normal" }}>
                                                     {order.orderDate}
                                                 </span>
                                             </h4>
 
-                                            <h4 style={{fontSize: "1.2rem"}}>
+                                            <h4 style={{ fontSize: "1.2rem" }}>
                                                 Delivery Date: &nbsp;
-                                                <span style={{fontSize: "0.9rem", fontWeight: "normal"}}>
+                                                <span style={{ fontSize: "0.9rem", fontWeight: "normal" }}>
                                                     {order.dueDate}
                                                 </span>
                                             </h4>
                                         </div>
                                         {
                                             order.productsList.map(product => {
-                                                return(
+                                                return (
                                                     <div className={styles.productCard} key={product.id}>
                                                         <div className={styles.imgContainer}>
                                                             <img src={product.image} alt="product" />
@@ -192,7 +218,7 @@ export default function UserOrdersPage() {
                                     </div>
                                 )
                             })}
-                        </div>
+                    </div>
                     }
                 </section>
             }

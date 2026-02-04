@@ -22,12 +22,15 @@ export default function Product() {
     const [popUpMsg, setPopUpMsg] = useState("");
 
     useEffect(() => {
-        axios.get("https://supersimplebackend.dev/products")
-            .then(res => {
-                const apiProducts = res.data;
-                const item = apiProducts.find((item) => item.id === id);
-                setProduct({ ...item });
-            })
+        // axios.get("https://supersimplebackend.dev/products")
+        //     .then(res => {
+        //         const apiProducts = res.data;
+        //         const item = apiProducts.find((item) => item.id === id);
+        //         setProduct({ ...item });
+        //     })
+        const apiProducts = productsData;
+        const item = apiProducts.find((item) => item.id === id);
+        setProduct({ ...item });
     }, [id]);
 
     const handleAddToCart = (product) => {

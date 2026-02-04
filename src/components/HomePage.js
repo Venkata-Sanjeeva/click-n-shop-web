@@ -57,20 +57,26 @@ export default function HomePage() {
     }
 
     useEffect(() => {
-        axios.get("https://supersimplebackend.dev/products")
-            .then((res) => {
-                let apiData = res.data;
-                apiData = apiData.map((productObj) => {
-                    const product = { ...productObj, unique_id: uuidv4() };
-                    return product;
-                });
-                setAPI(apiData);
-            })
-            .catch(err => {
-                setShowPopUp(true);
-                setPopUpMsg("Something went wrong!!!\n" + err);
-                return;
-            });
+        // axios.get("https://supersimplebackend.dev/products")
+        //     .then((res) => {
+        //         let apiData = res.data;
+        //         apiData = apiData.map((productObj) => {
+        //             const product = { ...productObj, unique_id: uuidv4() };
+        //             return product;
+        //         });
+        //         setAPI(apiData);
+        //     })
+        //     .catch(err => {
+        //         setShowPopUp(true);
+        //         setPopUpMsg("Something went wrong!!!\n" + err);
+        //         return;
+        //     });
+        let apiData = productsData;
+        apiData = apiData.map((productObj) => {
+            const product = { ...productObj, unique_id: uuidv4() };
+            return product;
+        });
+        setAPI(apiData);
 
         const userObj = JSON.parse(sessionStorage.getItem("user"));
 
