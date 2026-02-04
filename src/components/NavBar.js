@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import search from "../images/loupe.png";
 import PopUp from "../components/PopUp";
 import axios from "axios";
+import productsData from "../supersimple-dev-products.json";
 
 const API_URL = process.env.REACT_APP_API_URL;
 

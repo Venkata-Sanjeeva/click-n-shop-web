@@ -10,6 +10,7 @@ import HeartIconFilled from "../images/love.png";
 import Loader from './Loader';
 import PopUp from './PopUp';
 // uuidv4(); // ⇨ '9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d'
+import productsData from "../supersimple-dev-products.json";
 
 const API_URL = process.env.REACT_APP_API_URL;
 sessionStorage.removeItem("product");

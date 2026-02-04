@@ -5,6 +5,7 @@ import Navbar from "./NavBar";
 import Loader from "./Loader";
 import axios from "axios";
 import PopUp from "./PopUp";
+import productsData from "../supersimple-dev-products.json";
 
 const API_URL = process.env.REACT_APP_API_URL;
 

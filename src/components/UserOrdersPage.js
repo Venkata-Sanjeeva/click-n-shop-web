@@ -3,6 +3,7 @@ import Navbar from './NavBar';
 import styles from '../styles/UserOrdersPage.module.css';
 import axios from 'axios';
 import Loader from './Loader';
+import productsData from "../supersimple-dev-products.json";
 
 export default function UserOrdersPage() {
 

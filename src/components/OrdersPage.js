@@ -6,6 +6,7 @@ import Loader from './Loader';
 import { v4 as uuidv4 } from 'uuid';
 import PopUp from './PopUp';
 import { useNavigate } from 'react-router-dom';
+import productsData from "../supersimple-dev-products.json";
 
 export default function OrdersPage() {
 
