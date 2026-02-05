@@ -76,37 +76,37 @@ export default function UserOrdersPage() {
     }, []);
 
 
-    return(<>
-        <Navbar/>
+    return (<>
+        <Navbar />
         <h1>Orders Delivery Details</h1>
-        <>  
+        <>
             {
-                isLoading ? <Loader/> : currentUserOrders.length === 0 ? <h2>No products found.</h2> : <section className={styles.ordersDeliveryDetails}>
-                    
+                isLoading ? <Loader /> : currentUserOrders.length === 0 ? <h2>No products found.</h2> : <section className={styles.ordersDeliveryDetails}>
+
                     <div className={styles.currentOrdersDiv}>
                         {
                             currentUserOrders.map(order => {
-                                
-                                return(
+
+                                return (
                                     <div className={styles.ordersContainer} key={order.orderId}>
                                         <div className={styles.datesContainer}>
-                                            <h4 style={{fontSize: "1.2rem"}}>
+                                            <h4 style={{ fontSize: "1.2rem" }}>
                                                 Ordered Date: &nbsp;
-                                                <span style={{fontSize: "0.9rem", fontWeight: "normal"}}>
+                                                <span style={{ fontSize: "0.9rem", fontWeight: "normal" }}>
                                                     {order.orderDate}
                                                 </span>
                                             </h4>
 
-                                            <h4 style={{fontSize: "1.2rem"}}>
+                                            <h4 style={{ fontSize: "1.2rem" }}>
                                                 Delivery Date: &nbsp;
-                                                <span style={{fontSize: "0.9rem", fontWeight: "normal"}}>
+                                                <span style={{ fontSize: "0.9rem", fontWeight: "normal" }}>
                                                     {order.dueDate}
                                                 </span>
                                             </h4>
                                         </div>
                                         {
                                             order.productsList.map(product => {
-                                                return(
+                                                return (
                                                     <div className={styles.productCard} key={product.id}>
                                                         <div className={styles.imgContainer}>
                                                             <img src={product.image} alt="product" />
@@ -142,27 +142,27 @@ export default function UserOrdersPage() {
                         {console.log(pastUserOrders)}
                         {
                             pastUserOrders.map(order => {
-                                
-                                return(
+
+                                return (
                                     <div className={styles.ordersContainer} key={order.orderId}>
                                         <div className={styles.datesContainer}>
-                                            <h4 style={{fontSize: "1.2rem"}}>
+                                            <h4 style={{ fontSize: "1.2rem" }}>
                                                 Ordered Date: &nbsp;
-                                                <span style={{fontSize: "0.9rem", fontWeight: "normal"}}>
+                                                <span style={{ fontSize: "0.9rem", fontWeight: "normal" }}>
                                                     {order.orderDate}
                                                 </span>
                                             </h4>
 
-                                            <h4 style={{fontSize: "1.2rem"}}>
+                                            <h4 style={{ fontSize: "1.2rem" }}>
                                                 Delivery Date: &nbsp;
-                                                <span style={{fontSize: "0.9rem", fontWeight: "normal"}}>
+                                                <span style={{ fontSize: "0.9rem", fontWeight: "normal" }}>
                                                     {order.dueDate}
                                                 </span>
                                             </h4>
                                         </div>
                                         {
                                             order.productsList.map(product => {
-                                                return(
+                                                return (
                                                     <div className={styles.productCard} key={product.id}>
                                                         <div className={styles.imgContainer}>
                                                             <img src={product.image} alt="product" />
@@ -191,7 +191,7 @@ export default function UserOrdersPage() {
                                     </div>
                                 )
                             })}
-                        </div>
+                    </div>
                     }
                 </section>
             }

@@ -79,7 +79,11 @@ export default function WishListPage() {
 
         const removedWishListProductsWithDetails = userWishListProducts.filter(userWishListProduct => userWishListProduct.id !== product.id);
 
-        axios.delete(`${API_URL}/wishList/delete/` + userObj.uniqueId + "/" + product.id);
+        axios.delete(`${API_URL}/wishList/delete/` + userObj.uniqueId + "/" + product.id)
+        .then(res => {
+            console.log(res.status);
+        })
+        .catch(err => console.log(err));
 
         setUserWishListProducts([...removedWishListProductsWithDetails]);
     }
