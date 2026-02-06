@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import search from "../images/loupe.png";
 import PopUp from "../components/PopUp";
 import axios from "axios";
+import logo from "../images/Click_N_Shop_Logo.png";
 
 const API_URL = process.env.REACT_APP_API_URL;
 
@@ -57,7 +58,7 @@ const Navbar = () => {
             })
             .catch(err => console.log(err));
 
-        if(userObj) {
+        if (userObj) {
             updateCounts();
         }
 
@@ -115,7 +116,15 @@ const Navbar = () => {
     return (
         <nav className={styles.navbar}>
             <div className={styles.logo}>
-                <Link to={"/"} className={styles.logoLink}>ClickNShop</Link>
+                <img
+                    src={logo}
+                    alt="ClickNShop Logo"
+                    className={styles.logoImage}
+                    width={60}
+                />
+                <Link to={"/"} className={styles.logoLink}>
+                    ClickNShop
+                </Link>
             </div>
 
             <div className={styles.searchBarDiv}>
@@ -163,7 +172,7 @@ const Navbar = () => {
                         </li>
 
                         <li>
-                            <Link to={"/orders"} className={styles.link}>Order Details</Link> 
+                            <Link to={"/orders"} className={styles.link}>Order Details</Link>
                         </li>
 
                         <li>
@@ -171,18 +180,18 @@ const Navbar = () => {
                         </li>
 
                         <li>
-                            <Link to={"/profile/" + user.id} className={styles.link}>{user.username}'s Profile</Link>
+                            <Link to={"/profile/" + user.uniqueId} className={styles.link}>{user.username}'s Profile</Link>
                         </li>
 
                         <li>
                             <span className={styles.link} onClick={handleLogout}>LogOut</span>
                         </li>
                     </>
-                    : 
-                        <>
-                            <Link to={"/register"} className={styles.link}>SignUp</Link>
-                            <Link to={"/login"} className={styles.link}>Login</Link>
-                        </>
+                    :
+                    <>
+                        <Link to={"/register"} className={styles.link}>SignUp</Link>
+                        <Link to={"/login"} className={styles.link}>Login</Link>
+                    </>
                 }
 
             </ul>

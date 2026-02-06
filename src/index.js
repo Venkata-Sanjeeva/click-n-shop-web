@@ -28,7 +28,7 @@ const routes = createBrowserRouter([
   {path: "/wishlist", element: <WishListPage />},
   {path: "/cart", element: <CartPage />},
   {path: "/ordersDeliveryDetails", element: <UserOrdersPage />},
-  {path: "/profile/:userId", element: <ProfilePage />},
+  {path: "/profile/:userUniqueId", element: <ProfilePage />},
   {path: "/login", element: <LoginPage />},
   {path: "/resetPassword", element: <ForgotPassword />},
   {path: "/register", element: <RegisterPage />},

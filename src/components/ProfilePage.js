@@ -7,9 +7,11 @@ import PopUp from './PopUp';
 import NavBar from './NavBar';
 import Loader from './Loader';
 
+const API_URL = process.env.REACT_APP_API_URL;
+
 export default function ProfilePage() {
 
-    const {userId} = useParams();
+    const { userUniqueId } = useParams();
 
     const [countriesList, setCountriesList] = useState(null);
     const [statesList, setStatesList] = useState(null);
@@ -22,14 +24,14 @@ export default function ProfilePage() {
     const navigate = useNavigate();
 
     const getStates = (country) => {
-        
-        axios.post(`https://countriesnow.space/api/v0.1/countries/states`, {country})
+
+        axios.post(`https://countriesnow.space/api/v0.1/countries/states`, { country })
             .then(res => setStatesList(res.data.data.states))
             .catch(err => console.log(err));
     }
 
     const getCities = (state, country) => {
-        axios.post(`https://countriesnow.space/api/v0.1/countries/state/cities`, {state, country})
+        axios.post(`https://countriesnow.space/api/v0.1/countries/state/cities`, { state, country })
             .then(res => setCitiesList(res.data.data))
             .catch(err => console.log(err));
     }
@@ -49,36 +51,54 @@ export default function ProfilePage() {
     const [gender, setGender] = useState("");
     const [dob, setDob] = useState("");
 
+    const formatForDateInput = (dateStr) => {
+        if (!dateStr) return "";
+
+        const date = new Date(dateStr);
+
+        // convert to local yyyy-MM-dd
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, "0");
+        const day = String(date.getDate()).padStart(2, "0");
+
+        return `${year}-${month}-${day}`;
+    };
+
+
+
+
     useEffect(() => {
         axios.get("https://countriesnow.space/api/v0.1/countries")
-        .then(res => setCountriesList(res.data.data))
-        .catch(err => console.log(err));
+            .then(res => setCountriesList(res.data.data))
+            .catch(err => console.log(err));
 
-        axios.get("http://localhost:8080/users/" + userId)
-        .then(res => {
-            const user = res.data;
-            setUserDetails({...user});
-            setFullName(user.fullName);
-            setPhone(user.phone);
-            setEmail(user.email);
-            setAddress(user.address);
-            setCity(user.city);
-            setCountry(user.country);
-            setZipcode(user.zipcode);
-            setState(user.state);
-            setGender(user.gender);
-            setDob(user.dob);
+        axios.get(`${API_URL}/user/fetch/profile-details/` + userUniqueId)
+            .then(res => {
+                const user = res.data;
+                const username = JSON.parse(sessionStorage.getItem("user")).username;
+                setUserDetails({ ...user, username });
+                setFullName(user.fullName);
+                setPhone(user.phone);
+                setEmail(user.email);
+                setAddress(user.address);
+                setCity(user.city);
+                setCountry(user.country);
+                setZipcode(user.zipcode);
+                setState(user.state);
+                setGender(user.gender);
 
-            if(user.state?.length > 0 && user.country?.length > 0) {
-                getStates(user.country);
-                getCities(user.state, user.country);
-            }
-        })
-        .catch(err => console.log(err));
+                setDob(user.dob);
+
+                if (user.state?.length > 0 && user.country?.length > 0) {
+                    getStates(user.country);
+                    getCities(user.state, user.country);
+                }
+            })
+            .catch(err => console.log(err));
 
         setIsLoading(false);
 
-    }, [userId]);
+    }, [userUniqueId]);
 
     const verifyFields = () => {
         const errors = ValidateFields({
@@ -93,7 +113,7 @@ export default function ProfilePage() {
             dob
         });
 
-        setErrorObj({...errors});
+        setErrorObj({ ...errors });
         return Object.keys(errors).length > 0;
     }
 
@@ -105,11 +125,12 @@ export default function ProfilePage() {
 
     const handleSubmit = () => {
 
-        if(verifyFields()) {
+        if (verifyFields()) {
             return;
         };
 
         const userObj = {
+            email: userDetails.email,
             fullName: fullName?.trim(),
             phone: phone?.trim(),
             address: address?.trim(),
@@ -121,9 +142,15 @@ export default function ProfilePage() {
             dob: dob?.trim()
         };
 
-        axios.patch("http://localhost:8080/users/" + userId, userObj)
-        .then(res => console.log(res.data))
-        .catch(err => console.log(err));
+        axios.patch(`${API_URL}/user/update/profile-details/` + userUniqueId, userObj)
+            .then(res => console.log(res.status))
+            .catch(err => {
+                console.error(err);
+                const errorMsg = err.response?.data || err.message;
+
+                setShowPopup(true);
+                setPopupMsg("Something went wrong. Please try again later.", errorMsg);
+            });
 
         setShowPopup(true);
         setPopupMsg("Personal Details Updated Successfully.");
@@ -131,27 +158,27 @@ export default function ProfilePage() {
 
     const handleClosePopup = () => {
         setShowPopup(false);
-        navigate("/home");
+        navigate("/");
     };
 
 
     return (<>
         <NavBar />
-        {isLoading ? <Loader/> : <section className={styles.signupSection}>
-            {!userDetails ? <Loader/> : <div className={styles.container}>
+        {isLoading ? <Loader /> : <section className={styles.signupSection}>
+            {!userDetails ? <Loader /> : <div className={styles.container}>
                 <h1 className={styles.title}>{userDetails.username}'s Profile Page</h1>
                 <div className={styles.registerForm}>
                     {/* First Row, First Column */}
                     <div className={`${styles.formGroup} ${styles.fullName}`}>
                         <label className={styles.label}>Enter Full Name: </label>
                         <input type="text"
-                               value={fullName}
-                               placeholder="Enter your name..."
-                               onChange={(event) => {
-                                    errorObj.fullName = "";
-                                    setFullName(event.target.value);
-                               }}
-                               className={styles.input} />
+                            value={fullName}
+                            placeholder="Enter your name..."
+                            onChange={(event) => {
+                                errorObj.fullName = "";
+                                setFullName(event.target.value);
+                            }}
+                            className={styles.input} />
                         {errorObj.fullName && <span className={styles.nameErrorTag}>{errorObj.fullName}</span>}
                     </div>
 
@@ -159,13 +186,13 @@ export default function ProfilePage() {
                     <div className={`${styles.formGroup} ${styles.dobTag}`}>
                         <label className={styles.label}>Select Date Of Birth: </label>
                         <input type="date"
-                               value={dob}
-                               placeholder="dd/mm/yyyy" // Added placeholder for date input
-                               onChange={(event) => {
-                                    errorObj.dob = "";
-                                    setDob(event.target.value);
-                               }}
-                               className={styles.input} />
+                            value={formatForDateInput(dob) || ""}
+                            placeholder="dd/mm/yyyy" // Added placeholder for date input
+                            onChange={(event) => {
+                                errorObj.dob = "";
+                                setDob(event.target.value);
+                            }}
+                            className={styles.input} />
                         {errorObj.dob && <span className={styles.dobErrorTag}>{errorObj.dob}</span>}
                     </div>
 
@@ -189,8 +216,8 @@ export default function ProfilePage() {
                         <select
                             value={gender}
                             onChange={(event) => {
-                                    errorObj.gender = "";
-                                    setGender(event.target.value);
+                                errorObj.gender = "";
+                                setGender(event.target.value);
                             }}
                             className={styles.input}>
                             <option value="">Select Gender</option>
@@ -204,10 +231,10 @@ export default function ProfilePage() {
                     <div className={`${styles.formGroup} ${styles.email}`}>
                         <label className={styles.label}>Enter Email: </label>
                         <input type="email"
-                               value={email}
-                               placeholder="Enter your email..."
-                               readOnly
-                               className={styles.input} />
+                            value={email}
+                            placeholder="Enter your email..."
+                            readOnly
+                            className={styles.input} />
                         {errorObj.email && <span className={styles.emailErrorTag}>{errorObj.email}</span>}
                     </div>
 
@@ -215,13 +242,13 @@ export default function ProfilePage() {
                     <div className={`${styles.formGroup} ${styles.phone}`}>
                         <label className={styles.label}>Enter Phone Number: </label>
                         <input type="tel"
-                                value={phone}
-                               placeholder="Enter your phone..."
-                               onChange={(event) => {
-                                    errorObj.phone = "";
-                                    setPhone(event.target.value);
-                               }}
-                               className={styles.input} />
+                            value={phone}
+                            placeholder="Enter your phone..."
+                            onChange={(event) => {
+                                errorObj.phone = "";
+                                setPhone(event.target.value);
+                            }}
+                            className={styles.input} />
                         {errorObj.phone && <span className={styles.phoneErrorTag}>{errorObj.phone}</span>}
                     </div>
 
@@ -231,26 +258,26 @@ export default function ProfilePage() {
                     <div className={`${styles.formGroup} ${styles.address}`}>
                         <label className={styles.label}>Enter Address: </label>
                         <input type="text"
-                                value={address}
-                               placeholder="Enter your address..."
-                               onChange={(event) => {
-                                    errorObj.address = "";
-                                    setAddress(event.target.value);
-                               }}
-                               className={styles.input} />
+                            value={address}
+                            placeholder="Enter your address..."
+                            onChange={(event) => {
+                                errorObj.address = "";
+                                setAddress(event.target.value);
+                            }}
+                            className={styles.input} />
                         {errorObj.address && <span className={styles.addressErrorTag}>{errorObj.address}</span>}
                     </div>
-                        
+
                     {/* Fourth Row, First Column */}
                     <div className={`${styles.formGroup} ${styles.country}`}>
                         <label className={styles.label}>Select Country: </label>
                         <select onChange={(event) => {
-                                errorObj.country = "";
-                                setCountry(event.target.value);
-                                getStates(event.target.value.trim());
-                            }}
-                                value={country}
-                                className={styles.input}>
+                            errorObj.country = "";
+                            setCountry(event.target.value);
+                            getStates(event.target.value.trim());
+                        }}
+                            value={country}
+                            className={styles.input}>
                             <option value="">Select Country</option>
                             {countriesList && countriesList.map((country, index) => {
                                 return <option key={index} value={country.country}>{country.country}</option>
@@ -263,8 +290,8 @@ export default function ProfilePage() {
                     <div className={`${styles.formGroup} ${styles.state}`}>
                         <label className={styles.label}>Select State: </label>
                         <select onChange={handleStates}
-                                value={state}
-                                className={styles.input}>
+                            value={state}
+                            className={styles.input}>
                             <option value="">Select State</option>
                             {statesList && statesList.map((state, index) => {
                                 // The API returns an object with a 'name' property for states
@@ -278,14 +305,14 @@ export default function ProfilePage() {
                     <div className={`${styles.formGroup} ${styles.city}`}>
                         <label className={styles.label}>Select City: </label>
                         <select className={styles.input}
-                                value={city}
-                                onChange={(event) => {
-                                    errorObj.city = "";
-                                    setCity(event.target.value);
-                                }}>
+                            value={city}
+                            onChange={(event) => {
+                                errorObj.city = "";
+                                setCity(event.target.value);
+                            }}>
                             <option value={""}>Select City</option>
-                            {citiesList && citiesList.map((city, index) => {
-                                return <option key={index} value={city}>{city}</option>
+                            {citiesList && citiesList.map((citi, index) => {
+                                return <option key={index} value={citi}>{citi}</option>
                             })}
                         </select>
                         {errorObj.city && <span className={styles.cityErrorTag}>{errorObj.city}</span>}
@@ -295,13 +322,13 @@ export default function ProfilePage() {
                     <div className={`${styles.formGroup} ${styles.zipCode}`}>
                         <label className={styles.label}>Enter Zipcode: </label>
                         <input type="text"
-                                value={zipcode}
-                               placeholder="Enter your zipcode..."
-                               onChange={(event) => {
-                                    errorObj.zipcode = "";
-                                    setZipcode(event.target.value);
-                               }}
-                               className={styles.input} />
+                            value={zipcode}
+                            placeholder="Enter your zipcode..."
+                            onChange={(event) => {
+                                errorObj.zipcode = "";
+                                setZipcode(event.target.value);
+                            }}
+                            className={styles.input} />
                         {errorObj.zipcode && <span className={styles.zipErrorTag}>{errorObj.zipcode}</span>}
                     </div>
 
@@ -313,7 +340,7 @@ export default function ProfilePage() {
                 </div>
 
                 {/* Pop-up Message */}
-                {showPopup && (<PopUp msg={popupMsg} okFun={handleClosePopup} closeFun={() => setShowPopup(false)}/>)}
+                {showPopup && (<PopUp msg={popupMsg} okFun={handleClosePopup} closeFun={() => setShowPopup(false)} />)}
             </div>}
         </section>}
     </>);
