@@ -15,8 +15,6 @@ export default function WishListPage() {
 
     const [userWishListProducts, setUserWishListProducts] = useState([]);
 
-    const [userCartProducts, setUserCartProducts] = useState([]);
-
     const navigate = useNavigate();
 
     const [popUpMsg, setPopUpMsg] = useState("");
@@ -56,8 +54,7 @@ export default function WishListPage() {
 
             axios.get(`${API_URL}/cart/fetch/user/${userObj.uniqueId}`)
                 .then(res => {
-                    const userCart = res.data.cartItems;
-                    setUserCartProducts([...userCart]);
+                    console.log(res.status);
                 })
                 .catch(err => console.log(err));
 
@@ -89,8 +86,6 @@ export default function WishListPage() {
             .then(res => {
                 // EXECUTION ONLY ON SUCCESS (200 OK)
                 console.log("Product saved to DB:", res.status);
-
-                setUserCartProducts(prev => [...prev, { productId: product.id }]);
 
                 // Remove from wishlist only after successful cart addition
                 handleRemoveFromWishList(product);
