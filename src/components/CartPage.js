@@ -111,6 +111,8 @@ export default function CartPage() {
         axios.delete(`${API_URL}/cart/delete/` + userObj.uniqueId + "/" + item.id)
         .then(res => {
             console.log(res.data);
+            // Trigger a custom event that the Navbar is listening for
+            window.dispatchEvent(new Event("cartUpdated"));
         })
         .catch(err => console.log(err));
 

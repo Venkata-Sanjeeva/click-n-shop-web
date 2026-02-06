@@ -118,7 +118,13 @@ export default function HomePage() {
 
         productCard.innerText = "Added to cart";
 
-        axios.post(`${API_URL}/cart/save`, { userUniqueId: userObj.uniqueId, cartItem: { productId: product.id, quantity: 1, price: product.priceCents / 100 } });
+        axios.post(`${API_URL}/cart/save`, { userUniqueId: userObj.uniqueId, cartItem: { productId: product.id, quantity: 1, price: product.priceCents / 100 } })
+            .then(res => {
+                console.log(res.data);
+                // Trigger a custom event that the Navbar is listening for
+                window.dispatchEvent(new Event("cartUpdated"));
+            })
+            .catch(err => console.log(err));
 
         setCartProducts([...availableCartProducts, { productId: product.id, quantity: 1 }]);
 
@@ -144,7 +150,16 @@ export default function HomePage() {
         if (availableWishListProducts.find((item) => item.productId === productCard.id)) {
 
             // delete that product which is found in the available wishListProducts array
-            axios.delete(`${API_URL}/wishList/delete/` + userObj.uniqueId + "/" + productCard.id);
+            axios.delete(`${API_URL}/wishList/delete/` + userObj.uniqueId + "/" + productCard.id)
+                .then(res => {
+                    console.log(res.data);
+                    // Trigger a custom event that the Navbar is listening for
+                    window.dispatchEvent(new Event("cartUpdated"));
+                })
+                .catch(err => console.log(err));
+
+            availableWishListProducts = availableWishListProducts.filter((item) => item.productId !== productCard.id);
+            setWishListProducts([...availableWishListProducts]);
 
         } else {
             const reqData = {
@@ -156,7 +171,11 @@ export default function HomePage() {
             };
 
             axios.post(`${API_URL}/wishList/save`, reqData)
-                .then(res => console.log(res.data))
+                .then(res => {
+                    console.log(res.data);
+                    // Trigger a custom event that the Navbar is listening for
+                    window.dispatchEvent(new Event("cartUpdated"));
+                })
                 .catch(err => console.log(err));
 
             setWishListProducts([...availableWishListProducts, { productId: productCard.id }]);

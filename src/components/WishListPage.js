@@ -69,18 +69,53 @@ export default function WishListPage() {
     const handleAddToCart = (product) => {
         const userObj = JSON.parse(sessionStorage.getItem("user"));
 
-        sessionStorage.setItem("product", JSON.stringify({ ...product }));
+        // Guard clause: ensure user exists
+        if (!userObj) {
+            setShowPopUp(true);
+            setPopUpMsg("Please login to add items to the cart.");
+            return;
+        }
 
-        const availableCartProducts = [...userCartProducts];
+        const reqBody = {
+            userUniqueId: userObj.uniqueId,
+            cartItem: {
+                productId: product.id,
+                quantity: 1,
+                price: product.priceCents / 100
+            }
+        };
 
-        axios.post(`${API_URL}/cart/save`, { userUniqueId: userObj.uniqueId, cartItem: { productId: product.id, quantity: 1, price: product.priceCents / 100 } });
+        axios.post(`${API_URL}/cart/save`, reqBody)
+            .then(res => {
+                // EXECUTION ONLY ON SUCCESS (200 OK)
+                console.log("Product saved to DB:", res.status);
 
-        setUserCartProducts([...availableCartProducts, { productId: product.id }]);
+                setUserCartProducts(prev => [...prev, { productId: product.id }]);
 
-        handleRemoveFromWishList(product);
+                // Remove from wishlist only after successful cart addition
+                handleRemoveFromWishList(product);
 
-        setShowPopUp(true);
-        setPopUpMsg("Product added to cart.");
+                // Notify user
+                setShowPopUp(true);
+                setPopUpMsg("Product added to cart.");
+
+                // Sync session storage if needed
+                sessionStorage.setItem("product", JSON.stringify({ ...product }));
+
+                // Trigger a custom event that the Navbar is listening for
+                window.dispatchEvent(new Event("cartUpdated"));
+            })
+            .catch(err => {
+                // EXECUTION ON FAILURE (400, 500, etc.)
+                console.error("Cart save failed:", err);
+
+                setShowPopUp(true);
+                // Check if backend sent a specific error message
+                const errorMsg = err.response?.data || err.message;
+                setPopUpMsg("Could not add to cart: " + errorMsg);
+
+                // Logic stops here; handleRemoveFromWishList is never called
+            });
     };
 
     const handleRemoveFromWishList = (product) => {
@@ -89,10 +124,12 @@ export default function WishListPage() {
         const removedWishListProductsWithDetails = userWishListProducts.filter(userWishListProduct => userWishListProduct.id !== product.id);
 
         axios.delete(`${API_URL}/wishList/delete/` + userObj.uniqueId + "/" + product.id)
-        .then(res => {
-            console.log(res.status);
-        })
-        .catch(err => console.log(err));
+            .then(res => {
+                console.log(res.status);
+                // Trigger a custom event that the Navbar is listening for
+                window.dispatchEvent(new Event("cartUpdated"));
+            })
+            .catch(err => console.log(err));
 
         setUserWishListProducts([...removedWishListProductsWithDetails]);
     }

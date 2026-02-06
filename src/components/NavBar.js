@@ -30,6 +30,20 @@ const Navbar = () => {
 
     const [wishlistCount, setWishlistCount] = useState(0);
 
+    const updateCounts = () => {
+        const userObj = JSON.parse(sessionStorage.getItem("user"));
+
+        if (userObj) {
+            axios.get(`${API_URL}/cart/fetch/user/` + userObj.uniqueId)
+                .then(res => setCartCount(res.data.cartItems.length || 0))
+                .catch(err => console.log(err));
+
+            axios.get(`${API_URL}/wishList/fetch/user/` + userObj.uniqueId)
+                .then(res => setWishlistCount(res.data.wishListProducts.length || 0))
+                .catch(err => console.log(err));
+        }
+    }
+
     useEffect(() => {
         const userObj = JSON.parse(sessionStorage.getItem("user"));
         setUser(userObj);
@@ -50,15 +64,8 @@ const Navbar = () => {
 
         setApiProducts(modifiedProductsArr);
 
-        if (userObj) {
-
-            axios.get(`${API_URL}/cart/fetch/user/` + userObj.uniqueId)
-                .then(res => setCartCount(res.data.cartItems.length))
-                .catch(err => console.log(err));
-
-            axios.get(`${API_URL}/wishList/fetch/user/` + userObj.uniqueId)
-                .then(res => setWishlistCount(res.data.wishListProducts.length))
-                .catch(err => console.log(err));
+        if(userObj) {
+            updateCounts();
         }
 
         const url = window.location.href;
@@ -66,6 +73,9 @@ const Navbar = () => {
         if (url.includes("/cart")) {
             handleBorder("cart", "cartLinkId");
         }
+
+        window.addEventListener("cartUpdated", updateCounts);
+        return () => window.removeEventListener("cartUpdated", updateCounts);
 
     }, []);
 
