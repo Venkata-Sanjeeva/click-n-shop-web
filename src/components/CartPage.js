@@ -49,7 +49,7 @@ export default function CartPage() {
             setShowPopUp(true);
             return;
         }
-    }, [userObj]);
+    }, []);
 
     const handleAddItemToOrders = (item) => {
         let userOrders = JSON.parse(sessionStorage.getItem("userOrders")) || [];
@@ -69,29 +69,27 @@ export default function CartPage() {
         }
 
         const updatedSelectedProducts = selectedProducts.filter(userProd => userProd.id !== item.id);
-        setSelectedProducts([...updatedSelectedProducts]);
-
 
         axios.delete(`${API_URL}/cart/delete/${userObj.uniqueId}/${item.id}`)
-            .then(res => console.log(res.status))
-            .catch(err => console.error(err));
+            .then(res => {
+                console.log(res.status);
 
-        setTimeout(() => {
-            // Trigger a custom event that the Navbar is listening for
-            window.dispatchEvent(new Event("cartUpdated"));
-        }, 100);
+                // Trigger a custom event that the Navbar is listening for
+                window.dispatchEvent(new Event("cartUpdated"));
+            })
+            .catch(err => console.error(err));
 
         const updatedUserOrders = [...userOrders];
 
         sessionStorage.setItem("userOrders", JSON.stringify(updatedUserOrders));
 
+        setSelectedProducts([...updatedSelectedProducts]);
         setShowPopUp(true);
         setPopUpMsg("Product Added to Orders Successfully");
     }
 
 
     const handleRemoveFromCart = (item) => {
-        const userObj = JSON.parse(sessionStorage.getItem("user"));
 
         const removedCartProductsWithDetails = selectedProducts.filter(userWishListProduct => userWishListProduct.id !== item.id);
 
