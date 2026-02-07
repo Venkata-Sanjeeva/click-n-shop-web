@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import search from "../images/loupe.png";
 import PopUp from "../components/PopUp";
 import axios from "axios";
-import logo from "../images/Click_N_Shop_Logo.png";
+// import logo from "../images/Click_N_Shop_Logo.png";
 
 const API_URL = process.env.REACT_APP_API_URL;
 
@@ -116,12 +116,6 @@ const Navbar = () => {
     return (
         <nav className={styles.navbar}>
             <div className={styles.logo}>
-                <img
-                    src={logo}
-                    alt="ClickNShop Logo"
-                    className={styles.logoImage}
-                    width={60}
-                />
                 <Link to={"/"} className={styles.logoLink}>
                     ClickNShop
                 </Link>

@@ -4,6 +4,8 @@ import styles from '../styles/UserOrdersPage.module.css';
 import axios from 'axios';
 import Loader from './Loader';
 
+const API_URL = process.env.REACT_APP_API_URL;
+
 export default function UserOrdersPage() {
 
     const [currentUserOrders, setCurrentUserOrders] = useState([]);
@@ -12,48 +14,57 @@ export default function UserOrdersPage() {
 
     const [isLoading, setIsLoading] = useState(true);
 
+    const formatForDateInput = (dateStr) => {
+        if (!dateStr) return "";
+
+        const date = new Date(dateStr);
+
+        // convert to local yyyy-MM-dd
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, "0");
+        const day = String(date.getDate()).padStart(2, "0");
+
+        return `${year}-${month}-${day}`;
+    };
+
     useEffect(() => {
         const userObj = JSON.parse(sessionStorage.getItem("user"));
+        
+        if (userObj === null) {  // sessionStorage will result an array at first index 
+            return;
+        }
 
-        axios.get("http://localhost:8080/userOrders/")
-        .then(res => {
-            const apiOrderedUsers = res.data;
+        axios.get(`${API_URL}/orders/fetch/` + userObj.uniqueId)
+            .then(res => {
+                const apiUserOrders = res.data.ordersList;
 
-            const foundUser = apiOrderedUsers.find(user => user.id === userObj.id);
-            
+                const currentOrders = apiUserOrders.filter(order => (Number.parseInt(order.dueDate.substring(0, 2)) >= Number.parseInt(new Date().getDate())));
 
-            if(foundUser) {
-                axios.get("http://localhost:8080/userOrders/" + userObj.id)
-                .then(res => {
-                    const apiUserOrders = res.data.ordersList;
+                const pastOrders = apiUserOrders.filter(order => (Number.parseInt(order.dueDate.substring(0, 2)) < Number.parseInt(new Date().getDate())));
 
-                    const currentOrders = apiUserOrders.filter(order => (Number.parseInt(order.dueDate.substring(0, 2)) >= Number.parseInt(new Date().getDate())));
-                    
-                    const pastOrders = apiUserOrders.filter(order => (Number.parseInt(order.dueDate.substring(0, 2)) < Number.parseInt(new Date().getDate())));
-
-                    axios.get("https://supersimplebackend.dev/products")
+                axios.get("https://supersimplebackend.dev/products")
                     .then(res => {
 
                         const apiProducts = res.data;
 
                         const currentOrdersWithProducts = currentOrders.map(order => {
-                            
+
                             const orderProducts = order.productsList.map((product) => {
                                 const foundProduct = apiProducts.find((item) => item.id === product.productId);
                                 return foundProduct ? { ...foundProduct, quantity: product.quantity } : null; // Return null if not found
                             }).filter(Boolean); // Optionally filter out null values
 
-                            return({orderId: order.orderId, orderDate: order.orderDate, dueDate: order.dueDate, productsList: orderProducts});
+                            return ({ orderId: order.orderId, orderDate: order.orderDate, dueDate: order.dueDate, productsList: orderProducts });
                         });
 
                         const pastOrdersWithProducts = pastOrders.map((order) => {
-                            
+
                             const orderProducts = order.productsList.map((product) => {
                                 const foundProduct = apiProducts.find((item) => item.id === product.productId);
                                 return foundProduct ? { ...foundProduct, quantity: product.quantity } : null; // Return null if not found
                             }).filter(Boolean); // Optionally filter out null values
 
-                            return({orderId: order.orderId, orderDate: order.orderDate, dueDate: order.dueDate, productsList: orderProducts});
+                            return ({ orderId: order.orderId, orderDate: order.orderDate, dueDate: order.dueDate, productsList: orderProducts });
                         })
 
                         setIsLoading(false);
@@ -63,15 +74,8 @@ export default function UserOrdersPage() {
 
                     })
                     .catch(err => console.log(err));
-                })
-                .catch(err => console.log(err));
-
-            } else {
-                setCurrentUserOrders([]);
-                setIsLoading(false);
-            }
-        })
-        .catch(err => console.log(err));
+            })
+            .catch(err => console.log(err));
 
     }, []);
 
@@ -93,14 +97,14 @@ export default function UserOrdersPage() {
                                             <h4 style={{ fontSize: "1.2rem" }}>
                                                 Ordered Date: &nbsp;
                                                 <span style={{ fontSize: "0.9rem", fontWeight: "normal" }}>
-                                                    {order.orderDate}
+                                                    {formatForDateInput(order.orderDate)}
                                                 </span>
                                             </h4>
 
                                             <h4 style={{ fontSize: "1.2rem" }}>
                                                 Delivery Date: &nbsp;
                                                 <span style={{ fontSize: "0.9rem", fontWeight: "normal" }}>
-                                                    {order.dueDate}
+                                                    {formatForDateInput(order.dueDate)}
                                                 </span>
                                             </h4>
                                         </div>

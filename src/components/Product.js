@@ -13,8 +13,6 @@ export default function Product() {
     const { id } = useParams();
     const [product, setProduct] = useState(null);
 
-    const [cartProducts, setCartProducts] = useState([]);
-
     const navigate = useNavigate();
 
     const [showPopUp, setShowPopUp] = useState(false);
@@ -32,31 +30,48 @@ export default function Product() {
     const handleAddToCart = (product) => {
         const userObj = JSON.parse(sessionStorage.getItem("user"));
 
-        if (userObj === null) {  // sessionStorage will result an array at first index 
-            setPopUpMsg("Please login to add a product into cart.");
+        // Guard clause: ensure user exists
+        if (!userObj) {
             setShowPopUp(true);
+            setPopUpMsg("Please login to add items to the cart.");
             return;
         }
 
-        // increase the count currently present in the cart
+        const reqBody = {
+            userUniqueId: userObj.uniqueId,
+            cartItem: {
+                productId: product.id,
+                quantity: 1,
+                price: product.priceCents / 100
+            }
+        };
 
-        const availableCartProducts = [...cartProducts];
+        axios.post(`${API_URL}/cart/save`, reqBody)
+            .then(res => {
+                // EXECUTION ONLY ON SUCCESS (200 OK)
+                console.log("Product saved to DB:", res.status);
 
-        const productFound = availableCartProducts.find((item) => item.productId === product.id);
+                // Notify user
+                setShowPopUp(true);
+                setPopUpMsg("Product added to cart.");
 
-        if (productFound) {
-            setShowPopUp(true);
-            setPopUpMsg("This product is already added to your cart.");
-            return;
-        }
+                // Sync session storage if needed
+                sessionStorage.setItem("product", JSON.stringify({ ...product }));
 
-        axios.post(`${API_URL}/cart/save`, { userUniqueId: userObj.uniqueId, cartItem: { productId: product.id, quantity: 1, price: product.priceCents / 100 } });
-        
-        setShowPopUp(true);
-        setPopUpMsg("Product added to cart.");
+                // Trigger a custom event that the Navbar is listening for
+                window.dispatchEvent(new Event("cartUpdated"));
+            })
+            .catch(err => {
+                // EXECUTION ON FAILURE (400, 500, etc.)
+                console.error("Cart save failed:", err);
 
-        setCartProducts([...availableCartProducts, { productId: product.id }]);
+                setShowPopUp(true);
+                // Check if backend sent a specific error message
+                const errorMsg = err.response?.data || err.message;
+                setPopUpMsg("Could not add to cart: " + errorMsg);
 
+                // Logic stops here; handleRemoveFromWishList is never called
+            });
     };
 
 

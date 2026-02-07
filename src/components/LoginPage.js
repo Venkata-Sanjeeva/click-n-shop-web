@@ -7,7 +7,7 @@ import axios from "axios";
 import ValidateFields from "../utils/ValidateFields";
 import PopUp from "./PopUp";
 import Navbar from "./NavBar";
-import Loader from "./Loader";
+// import Loader from "./Loader";
 
 const API_URL = process.env.REACT_APP_API_URL;
 

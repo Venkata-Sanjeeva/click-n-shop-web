@@ -19,91 +19,90 @@ export default function CartPage() {
 
     const [popUpMsg, setPopUpMsg] = useState("");
 
-    useEffect(() => {
-        const userObj = JSON.parse(sessionStorage.getItem("user"));
+    const userObj = JSON.parse(sessionStorage.getItem("user"));
 
-        if(userObj && userObj.uniqueId) {
-                axios.get(`${API_URL}/cart/fetch/user/` + userObj.uniqueId)
+    useEffect(() => {
+
+        if (userObj && userObj.uniqueId) {
+            axios.get(`${API_URL}/cart/fetch/user/` + userObj.uniqueId)
                 .then(res => {
 
                     const cartProductIds = res.data.cartItems;
-                    
+
                     axios.get("https://supersimplebackend.dev/products")
-                    .then(res => {
-                        const availableProducts = res.data;
-
-                        const array = cartProductIds.map(cartProduct => {
-                            const product = availableProducts.find(apiProduct => apiProduct.id === cartProduct.productId);
-                            return product;
-                        })
-
-                        setSelectedProducts(array);
-                        setIsLoading(false);
-                    })
-                    .catch(err => console.error(err));
-                    })
-                .catch(err => console.error(err));
-            }
-    }, []);
-
-    const handlePlaceOrder = (item) => {
-        const userObj = JSON.parse(sessionStorage.getItem("user"));
-
-        axios.get("http://localhost:8080/orders")
-            .then(res => {
-                const userFound = (res.data || []).find(user => user.id === userObj.id);
-                if (userFound) {
-                    axios.get("http://localhost:8080/orders/" + userObj.id)
                         .then(res => {
-                            const orderProductIds = res.data.orderItems;
+                            const availableProducts = res.data;
 
-                            const productFound = orderProductIds.find(orderProduct => orderProduct.productId === item.id);
+                            const array = cartProductIds.map(cartProduct => {
+                                const product = availableProducts.find(apiProduct => apiProduct.id === cartProduct.productId);
+                                return product;
+                            })
 
-                            if (!productFound) {
-                                axios.patch("http://localhost:8080/orders/" + userObj.id, { orderItems: [...orderProductIds, { productId: item.id, quantity: 1 }] })
-                                    .then(res => {
-                                        console.log(res.status);
-                                        setShowPopUp(true);
-                                        setPopUpMsg("Order Placed Successfully.");
-                                    })
-                                    .catch(err => console.error(err));
-
-                                const updatedProducts = selectedProducts.filter(selectedProduct => selectedProduct.id !== item.id);
-
-                                // here we are updating cart items
-                                axios.patch("http://localhost:8080/cart/" + userObj.id, { cartItems: updatedProducts.map(product => ({ productId: product.id, quantity: 1 })) });
-
-                                setSelectedProducts(updatedProducts);
-                            } else {
-                                setShowPopUp(true);
-                                setPopUpMsg("Product Already Added To Order");
-                            }
-                        })
-                } else {
-                    axios.post("http://localhost:8080/orders", { id: userObj.id, orderItems: [{ productId: item.id, quantity: 1 }] })
-                        .then(res => {
-                            console.log(res.status);
-                            setShowPopUp(true);
-                            setPopUpMsg("Order Placed Successfully");
+                            setSelectedProducts(array);
+                            setIsLoading(false);
                         })
                         .catch(err => console.error(err));
-                }
-            }).catch(err => console.error(err));
+                })
+                .catch(err => console.error(err));
+        } else {
+            setPopUpMsg("Please login to add a product into cart.");
+            setShowPopUp(true);
+            return;
+        }
+    }, [userObj]);
+
+    const handleAddItemToOrders = (item) => {
+        let userOrders = JSON.parse(sessionStorage.getItem("userOrders")) || [];
+
+        const existingItem = userOrders.find(prod => prod.id === item.id);
+
+        if (existingItem) {
+            // Item exists: Map through and increment quantity
+            userOrders = userOrders.map(order =>
+                order.id === item.id
+                    ? { ...order, quantity: order.quantity + 1 }
+                    : order
+            );
+        } else {
+            // Item is new: Add it to the array
+            userOrders = [...userOrders, { ...item, quantity: 1 }];
+        }
+
+        const updatedSelectedProducts = selectedProducts.filter(userProd => userProd.id !== item.id);
+        setSelectedProducts([...updatedSelectedProducts]);
+
+
+        axios.delete(`${API_URL}/cart/delete/${userObj.uniqueId}/${item.id}`)
+            .then(res => console.log(res.status))
+            .catch(err => console.error(err));
+
+        setTimeout(() => {
+            // Trigger a custom event that the Navbar is listening for
+            window.dispatchEvent(new Event("cartUpdated"));
+        }, 100);
+
+        const updatedUserOrders = [...userOrders];
+
+        sessionStorage.setItem("userOrders", JSON.stringify(updatedUserOrders));
+
+        setShowPopUp(true);
+        setPopUpMsg("Product Added to Orders Successfully");
     }
 
 
-    const handleRemoveItem = (item) => {
+    const handleRemoveFromCart = (item) => {
         const userObj = JSON.parse(sessionStorage.getItem("user"));
 
         const removedCartProductsWithDetails = selectedProducts.filter(userWishListProduct => userWishListProduct.id !== item.id);
 
-        axios.delete(`${API_URL}/cart/delete/` + userObj.uniqueId + "/" + item.id)
-        .then(res => {
-            console.log(res.data);
-            // Trigger a custom event that the Navbar is listening for
-            window.dispatchEvent(new Event("cartUpdated"));
-        })
-        .catch(err => console.log(err));
+        axios.delete(`${API_URL}/cart/delete/${userObj.uniqueId}/${item.id}`)
+            .then(res => {
+                console.log(res.status);
+
+                // Trigger a custom event that the Navbar is listening for
+                window.dispatchEvent(new Event("cartUpdated"));
+            })
+            .catch(err => console.error(err));
 
         setSelectedProducts(removedCartProductsWithDetails);
     }
@@ -132,10 +131,10 @@ export default function CartPage() {
 
                                 <div className={styles.productButtons}>
                                     <div className={styles.placeOrderDiv}>
-                                        <button className={styles.placeOrderBtn} onClick={() => handlePlaceOrder(item)}>Place Order</button>
+                                        <button className={styles.placeOrderBtn} onClick={() => handleAddItemToOrders(item)}>Place Order</button>
                                     </div>
                                     <div className={styles.cancelOrderDiv}>
-                                        <button className={styles.placeOrderBtn} onClick={() => handleRemoveItem(item)}>Remove</button>
+                                        <button className={styles.placeOrderBtn} onClick={() => handleRemoveFromCart(item)}>Remove</button>
                                     </div>
                                 </div>
                             </div>
