@@ -96,11 +96,7 @@ const Navbar = () => {
     const handlePopup = () => {
         setShowPopUp(false);
         sessionStorage.removeItem("user");
-        if (window.location.href.includes("/")) {
-            window.location.reload();
-        } else {
-            navigate("/");
-        }
+        navigate("/");
     }
 
     const handleLogout = () => {

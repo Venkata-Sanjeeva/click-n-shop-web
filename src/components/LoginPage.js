@@ -68,8 +68,6 @@ export default function LoginPage() {
         showPopUpMsg.includes("Verified") ? navigate("/") : navigate("/login");
     }
 
-    // <Loader/>
-
     return (
         loading ? <Loader /> : <>
             <Navbar />
