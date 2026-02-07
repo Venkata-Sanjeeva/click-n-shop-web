@@ -104,7 +104,7 @@ export default function RegisterPage() {
 
     const handleClosePopup = () => {
         setShowPopup(false);
-        navigate("/login");
+        window.location.href = "/login";
     }
 
 
